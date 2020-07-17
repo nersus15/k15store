@@ -3,7 +3,6 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\isAdmin;
 use App\Http\Middleware\notAdmin;
-use Illuminate\Support\Facades\URL;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -16,7 +15,7 @@ use Illuminate\Support\Facades\URL;
 */
 
 if (!session_id()) session_start();
-URL::forceSchema('https');
+// URL::forceSchema('https');
 Route::get('/', ['uses' => 'Pembeli@index']);
 Route::get('/product/{id}', ['uses' => 'Pembeli@detailProduct']);
 Route::get('/keranjang', ['uses' => 'Pembeli@keranjang'])->middleware([notAdmin::class]);
