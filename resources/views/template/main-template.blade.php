@@ -27,7 +27,7 @@
         <script class="rahasia">
             var storage_path = "<?php echo $storage_path ?>";
             var path = window.location.origin;
-            var resources_path = "<?php echo $resources_path ?>";
+            var resources_path = "<?php echo {{!!asset($resources_path, true) !!}} ?>";
             var session = <?php echo !empty($user) ? json_encode($user) : "null" ?>;
         </script>
 
