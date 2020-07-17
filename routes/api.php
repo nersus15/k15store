@@ -2,7 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
+use \Illuminate\Support\Facades\DB;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -89,4 +89,7 @@ Route::get('/cost/{origin}/{dest}/{weight}/{courier}', function($origin, $dest, 
 Route::resources(['product' => 'Product', 'ulasan' => 'Ulasan', 'transaksi' => 'Transaksi']);
 
 Route::get('/product/ulasan/{product}', ['uses' => 'Ulasan@index']);
-Route::get('/keranjang/{status}/{pembeli}/{opsi}', ['uses' => 'Transaksi@transaksi']);
+Route::get('/riwayat/{status}/{pembeli}/{opsi}', ['uses' => 'Transaksi@transaksi']);
+Route::get('/notif/count/{user}', function($user){
+    return DB::table('notif')->where('pembaca', $user)->get();
+});

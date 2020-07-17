@@ -130,6 +130,11 @@ const modalConf = {
             ajax: true,
             modalPos: 'right',
             saatTutup: () => { },
+            submitSuccess: (res) => {
+                UiHelper.addNotifItem('#notificationDropdown', [res.data]);
+                $("#" + modalConf.keranjang.modalId).modal('hide');
+                window.location.reload();
+            },
             formOpt: {
                 enctype: 'multipart/form-data',
                 formId: "form-edit-tr",

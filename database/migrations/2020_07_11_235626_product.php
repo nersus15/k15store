@@ -27,9 +27,6 @@ class Product extends Migration
             $table->enum('kondisi', ['baru', 'bekas'])->default('baru');
             $table->integer('terjual')->default(0);
             $table->integer('batas_beli');
-        });
-
-        Schema::table('product', function (Blueprint $table) {
             $table->foreign('owner')->references('username')->on('users')->onDelete('cascade')->onUpdate('cascade'); 
         });
     }

@@ -92,6 +92,8 @@ $(document).ready(function () {
                         body.pembeli = session.username;
                         keranjang(body);
                     }
+
+                    keranjangCount();
                 }
                 UiHelper.generateModal(modalId, wrapper, opt);
             } else {
@@ -126,10 +128,10 @@ async function keranjang(body) {
         }
         catch (err) {
             notifyConf.message = err,
-            setTimeout(function () {
-                $('body').removeClass('show-spinner');
-                $('body').removeClass('modal-open');
-            }, 3000);
+                setTimeout(function () {
+                    $('body').removeClass('show-spinner');
+                    $('body').removeClass('modal-open');
+                }, 3000);
             UiHelper.makeNotify(notifyConf);
         }
     }).then(res => {
@@ -267,11 +269,11 @@ $("#kab_kota, #kurir").change(async function () {
     let item = ``;
     let index;
     let sortedharga = [];
-    if(costs.length <= 0){
+    if (costs.length <= 0) {
         $('#cost').text('Tidak tersedia');
         return;
     }
-    costs.forEach(cost => {        
+    costs.forEach(cost => {
         harga.push(parseInt(cost.cost[0].value));
         service.push(cost.service);
         estimasi.push(cost.cost[0].etd.replace('HARI', ''));
@@ -279,7 +281,7 @@ $("#kab_kota, #kurir").change(async function () {
     });
     sortedharga = harga.sort(function (a, b) { return a - b })
     harga.forEach((h, i) => {
-        if(h == sortedharga[0])
+        if (h == sortedharga[0])
             index = i;
     });
 

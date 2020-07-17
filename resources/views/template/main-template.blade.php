@@ -34,9 +34,14 @@
 </head>
 <body id="app-container" class="menu-default show-spinner">
     {{-- Navbar --}}
-    @include($navbar)
+    @if(isset($navbar))
+        @include($navbar)
+    @endif
 
     {{-- Sidebar --}}
+    @if(isset($sidebar))
+        @include($sidebar)
+    @endif
 
     {{-- Main content --}}
     @if (isset($content))

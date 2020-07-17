@@ -19,7 +19,7 @@ class Transaksi extends Migration
             $table->string('barang', 5);
             $table->string('pembeli', 100);
             $table->integer('jumlah');
-            $table->enum('status', ['keranjang', 'bayar', 'kirim', 'batal', 'permintaan kembalikan', 'kembali', 'selesai'])->default('keranjang');
+            $table->enum('status', ['keranjang', 'bayar', 'konfirmasi', 'kirim', 'batal', 'permintaan kembalikan', 'kembali', 'selesai'])->default('keranjang');
             $table->string('origin', 250)->nullable();
             $table->string('destinasi', 250)->nullable();
             $table->string('detail_alamat', 350)->nullable();
@@ -29,8 +29,7 @@ class Transaksi extends Migration
             $table->integer('total')->nullable();
             $table->string('estimasi', 35)->nullable();
             $table->timestamp('tanggal_selesai')->nullable();
-        });
-        Schema::table('transaksi', function (Blueprint $table) {
+            $table->timestamp('tanggal_update')->nullable();
             $table->foreign('barang')->references('id')->on('product')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('pembeli')->references('username')->on('users')->onDelete('cascade')->onUpdate('cascade');
         });

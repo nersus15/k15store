@@ -122,6 +122,30 @@ class UiHelper {
             validator: {}
         };
     }
+    static addNotifItem(wrapper, item) {
+        let notif = '';
+        let count = $('#notif-count').text();
+        item.forEach(i => {
+            notif += `
+                <div class="d-flex flex-row mb-3 pb-3 border-bottom">
+                    <div class="pl-3 pr-2">
+                        <a id="${i.id}" class="n-item" href="#">
+                            <p class="font-weight-medium mb-1">${i.judul}</p>
+                            <p class="text-muted mb-0 text-small">${i.tanggal}</p>
+                        </a>
+                    </div>
+                </div>
+                `;
+        });
+        $(wrapper).html(notif);
+        if (!count)
+            count = 0;
+        else
+            count = parseInt(count);
+        if(item.length > 0)
+            $('#notif-count').text(item.length).show();
+
+    }
     static generateModal(modalId, wrapper, opt) {
         let body = "";
         let foot = "";

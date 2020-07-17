@@ -11,13 +11,6 @@
     <div class="navbar-right">
         <div class="header-icons d-inline-block align-middle">
             <div class="position-relative d-inline-block">
-                <button class="header-icon btn btn-empty" type="button" id="keranjang-btn"
-                    aria-haspopup="true" aria-expanded="false">
-                    <i class="iconsmind-Shopping-Cart"></i>
-                    <span id="keranjang-count" class="count badge-count"></span>
-                </button>
-            </div>
-            <div class="position-relative d-inline-block">
                 <button class="header-icon btn btn-empty" type="button" id="notificationButton" data-toggle="dropdown"
                     aria-haspopup="true" aria-expanded="false">
                     <i class="simple-icon-bell"></i>
@@ -26,9 +19,6 @@
                 <div class="dropdown-menu dropdown-menu-right mt-3 scroll position-absolute" id="notificationDropdown">
                 </div>
             </div>
-
-           
-
         </div>
         @if (!empty($user))
         <div class="user d-inline-block">

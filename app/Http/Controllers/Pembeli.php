@@ -45,7 +45,6 @@ class Pembeli extends Controller
         $data = array(
             'pageTitle' => 'K15 Store | Situs Jual Beli Online',
             'navbar' => 'comp/navbarPengunjung',
-            'sidebar' => 'comp/sidebarPengunjung',
             'footer' => 'comp/footerPengunjung',
             'css' => $this->resource['css'],
             'js' => $this->resource['js'],
@@ -56,7 +55,7 @@ class Pembeli extends Controller
                 'public/product'
             ]
         );
-        return view('template/pengunjung', $data);
+        return view('template/main-template', $data);
     }
 
 
@@ -72,7 +71,6 @@ class Pembeli extends Controller
         $data = array(
             'pageTitle' => 'K15 Store | Situs Jual Beli Online',
             'navbar' => 'comp/navbarPengunjung',
-            'sidebar' => 'comp/sidebarPengunjung',
             'footer' => 'comp/footerPengunjung',
             'css' => $this->resource['css'],
             'js' => $this->resource['js'],
@@ -84,7 +82,7 @@ class Pembeli extends Controller
                 'public/detailProduct'
             ]
         );
-        return view('template/pengunjung', $data);
+        return view('template/main-template', $data);
     }
     
     function keranjang(){
@@ -94,7 +92,6 @@ class Pembeli extends Controller
         $data = array(
             'pageTitle' => 'K15 Store | Situs Jual Beli Online',
             'navbar' => 'comp/navbarPengunjung',
-            'sidebar' => 'comp/sidebarPengunjung',
             'footer' => 'comp/footerPengunjung',
             'css' => $this->resource['css'],
             'js' => $this->resource['js'],
@@ -105,6 +102,23 @@ class Pembeli extends Controller
                 'public/keranjang'
             ]
         );
-        return view('template/pengunjung', $data);
+        return view('template/main-template', $data);
+    }
+    function riwayat(){
+        $this->resource['js'][] = ['pos' => 'body:end', 'js' => 'js/pages/riwayat.js'];
+        $data = array(
+            'pageTitle' => 'K15 Store | Situs Jual Beli Online',
+            'navbar' => 'comp/navbarPengunjung',
+            'footer' => 'comp/footerPengunjung',
+            'css' => $this->resource['css'],
+            'js' => $this->resource['js'],
+            'storage_path' => asset('storage'),
+            'resources_path' => asset(''),
+            'user' => !empty($_SESSION['userdata']) ? $_SESSION['userdata'] : null,
+            'content' => [
+                'public/riwayat'
+            ]
+        );
+        return view('template/main-template', $data);
     }
 }
