@@ -57,10 +57,7 @@
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
         ],
         "post-create-project-cmd": [
-            "@php artisan key:generate --ansi",
-            "@php artisan migrate",
-            "@php artisan db:seed --class=UserSeeder",
-            "@php artisan db:seed --class=ProductSeeder"
+            "@php artisan key:generate --ansi"
         ]
     }
 }
