@@ -6,6 +6,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Throwable;
 
 class Transaksi extends Controller
 {
@@ -14,7 +15,8 @@ class Transaksi extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function __construct() {
+    public function __construct()
+    {
         date_default_timezone_set('Asia/Jakarta');
     }
     public function index()
@@ -72,18 +74,29 @@ class Transaksi extends Controller
     /**
      * @return \Illuminate\Http\Response
      */
-    function transaksi($status, $pembeli, $opsi = null)
+    function transaksi($status, $pembeli = null, $opsi = null)
     {
         if (!isset($_SESSION['userdata']))
             return response("Error Processing Request, Login dulu !", 401);
 
-        $transaksi = DB::table('transaksi')->select('transaksi.*', 'product.*', 'transaksi.id as idtr')->join('product', 'product.id', '=', 'transaksi.barang', 'inner')->where('pembeli', $pembeli);
+        $transaksi = DB::table('transaksi')->select('transaksi.*', 'product.*', 'transaksi.id as idtr')->join('product', 'product.id', '=', 'transaksi.barang', 'inner');
         // $transaksi = DB::table('transaksi')->join('product', 'product.id', '=', 'transaksi.barang', 'inner')->where('pembeli', $pembeli)->where('status', $status);
 
-        if ($status == 'riwayat')
-            $transaksi->where('transaksi.status', '!=', 'keranjang');
-        if ($status != 'all' && $status != 'riwayat')
-            $transaksi->where('transaksi.status', $status);
+        if ($pembeli != 'null')
+            $transaksi->where('pembeli', $pembeli);
+
+        switch ($status) {
+            case 'riwayat':
+                $transaksi->where('transaksi.status', '!=', 'keranjang');
+                break;
+            case 'order':
+                $transaksi->where('transaksi.status', 'bayar');
+                break;
+            case 'keranjang':
+                $transaksi->where('transaksi.status', 'keranjang');
+                break;
+        }
+
         if ($opsi == 'count')
             return $transaksi->count();
 
@@ -120,6 +133,10 @@ class Transaksi extends Controller
     public function update(Request $request, $id)
     {
 
+        $notif = [
+            'id' => Str::random(5),
+            'tanggal' => date('Y-m-d H:i:s')
+        ];
         if ($request->checkout == 'on') {
             if (!isset($request->edit)) {
                 $post = [
@@ -140,6 +157,9 @@ class Transaksi extends Controller
                     'tanggal_update' => date('Y-m-d H:i:s'),
                 ];
             }
+            $notif['pesan'] = 'Berhasil melakukan checkout, Selanjutnya silahkan melakukan pembayaran secepatnya, sebelum <strong>' . date('Y-m-d H:i:s', time() + 24 * 3600) . '</strong> klik <a href="#">disini</a> untuk melihat detail pembayaran';
+            $notif['judul'] = 'Pembayaran untuk transaksi <b>' . $id . '</b>';
+            $notif['pembaca'] = $request->pembeli;
         } else {
             $post = [
                 'jumlah' => $request->jumlah,
@@ -151,21 +171,34 @@ class Transaksi extends Controller
                 'kurir' => $request->kurir,
                 'detail_alamat' => $request->detail_alamat,
             ];
+            $notif['judul'] = "Memperbaruai transaksi dengan id <b>" . $id . '</b>';
+            $notif['pembaca'] = $request->pembeli;
+        }
+
+        if (isset($request->konfirmasi) && $request->konfirmasi) {
+            $post = [
+                'tanggal_update' => date('Y-m-d H:i:s'),
+                'status' => 'konfirmasi',
+            ];
+            $notif = [
+                [
+                    'id' => Str::random(5),
+                    'tanggal' => date('Y-m-d H:i:s'),
+                    'judul' => 'Pemberitahuan',
+                    'pesan' => 'Barang anda dengan id <b>' . $request->barang_id . ' (' . $request->barang . ')</barang> telah dipesan dan dibayar, silahkan segera melakukan pengiriman',
+                    'pembaca' => $request->penjual
+                ],
+                [
+                    'id' => Str::random(5),
+                    'tanggal' => date('Y-m-d H:i:s'),
+                    'judul' => 'Pemberitahuan Pembayaran',
+                    'pesan' => 'Pembayaran untuk barang pesanan dengan id <b>' . $request->barang_id . ' (' . $request->barang . ')</barang> Telah dikonfirmasi, penjual sedang memprosesnya',
+                    'pembaca' => $request->pembeli
+                ],
+            ];
         }
         try {
             DB::table('transaksi')->where('id', $id)->update($post);
-            $notif = [
-                'id' => Str::random(5),
-                'tanggal' => date('Y-m-d H:i:s'),
-                'pesan' => 'Berhasil melakukan checkout, Selanjutnya silahkan melakukan pembayaran secepatnya, sebelum <strong>' . date('Y-m-d H:i:s', time() + 24 * 3600) . '</strong> klik <a href="#">disini</a> untuk melihat detail pembayaran',
-                'judul' => 'Pembayaran untuk transaksi <b>' . $id . '</b>',
-                'pembaca' => $request->pembeli
-            ];
-
-            if (empty($request->checkout)) {
-                $notif['judul'] = "Memperbaruai transaksi dengan id <b>" . $id . '</b>';
-                $notif['pesan'] = "";
-            }
             DB::table('notif')->insert($notif);
             return ['data' => $notif, 'message' => isset($request->checkout) && $request->checkout == 'on' ? isset($request->edit) ? 'Berhasil edit dan checkout' : 'Checkout berhasil' : 'Berhasil Memperbarui'];
         } catch (\Throwable $th) {
@@ -181,6 +214,31 @@ class Transaksi extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+
+            $tr = DB::table('transaksi')->select('product.nama_product', 'transaksi.pembeli', 'transaksi.pembeli')->join('product', 'product.id', '=', 'transaksi.barang')->where('transaksi.id', $id)->first();
+            DB::table('transaksi')->where('id', $id)->delete();
+            $res = ["message" => 'Berhasil menghapus data'];
+            $notif = [
+                [
+                    'judul' => 'Anda membatalkan pesanan',
+                    'id' => Str::random(5),
+                    'pembaca' => $tr->pembeli,
+                    'pesan' => 'Anda membatalkan pesanan anda untuk barang <b>' . $tr->nama_product . '</b>',
+                    'tanggal' => date('Y-m-d H:i:s')
+                ],
+                [
+                    'judul' => 'Pembatalan',
+                    'pesan' => $tr->pembeli . ' Membatalkan pesanannya untuk barang <b>' . $tr->nama_product . '</b>',
+                    'id' => Str::random(5),
+                    'pembaca' => 'admin-k15store',
+                    'tanggal' => date('Y-m-d H:i:s')
+                ],
+            ];
+            DB::table('notif')->insert($notif);
+        } catch (\Throwable $err) {
+            $res = ['message' => 'Terjadi kesalahan', 'err' => $err];
+        }
+        return $res;
     }
 }

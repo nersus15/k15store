@@ -5,7 +5,7 @@ async function getRiwayat() {
         'bayar': 'red',
         'kirim': '#0b5927',
         'selesai': '#2fba13',
-        'konformasi': 'orange'
+        'konfirmasi': 'orange'
     }
     const data = await fetch(path + '/api/riwayat/riwayat/' + session.username + '/null').then(res => res.json()).then(res => res);
     if (data.length > 0) {
@@ -15,7 +15,7 @@ async function getRiwayat() {
             let color = mapskey[item.status];
             rows += `
                 <tr style = "color: ${color}">
-                    <td data-total=${item.total} class="bayar" data-thumbnail = ${thumbnail[0]} style="cursor: pointer" data-barang="${index}">${item.nama_product}</td>
+                    <td data-index="${index}" class="bayar" data-thumbnail = ${thumbnail[0]} style="cursor: pointer" data-barang="${index}">${item.nama_product}</td>
                     <td>${item.jumlah}</td>
                     <td class="username" style="cursor: pointer" data-username="${item.owner}">${item.owner}</td>
                     <td>Rp. ${item.harga.toString().rupiahFormat()}</td>
@@ -29,15 +29,23 @@ async function getRiwayat() {
 
     }
     initDatatable('.data-table', { search: true, info: true, change: true, order: true });
-    $('.bayar').click(bayar)
+    $('.bayar').on('click', data, bayar);
 }
 
-function bayar(){
+function bayar(event) {
     const thumbnail = $(this).data('thumbnail');
-    const total = 'Rp. ' + $(this).data('total').toString().rupiahFormat();
     const { modalId, wrapper, opt } = modalConf.keranjang;
+    const barang = event.data[$(this).data('barang')];   
+    const status = barang.status;
+    const total = 'Rp. ' + barang.total.toString().rupiahFormat(); if (status != 'bayar')
+        return;
+
     opt.modalId = "riwayat";
     opt.modalTitle = 'Informasi pembayaran';
+    opt.modalSubtitle = barang.nama_product;
+    opt.saatBuka = () => {
+        $('#batalkan').click(saatBuka);
+    }
     opt.modalBody = {
         customBody: `
             <div class="row">
@@ -56,5 +64,29 @@ function bayar(){
             </div>
             `,
     };
+    opt.modalFooter = [
+        { type: 'reset', data: 'data-dismiss="modal"', text: 'Tutup', id: "batal", class: "btn btn-empty" },
+        { type: 'button', data: `data-id="${barang.idtr}"`, text: 'Batalkan', id: "batalkan", class: "btn btn btn-outline-danger" },
+    ];
     UiHelper.generateModal(modalId, wrapper, opt);
 };
+
+function saatBuka() {
+    const idtr = $(this).data('id');
+    $(this).prop('disabled', true);
+    fetch(path + '/api/transaksi/' + idtr, {
+        method: 'DELETE',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+    }).then(res => res.json()).then(res => {
+        $(this).prop('disabled', false);
+        if (res.err)
+            UiHelper.makeNotify({ type: 'danger', title: 'Error', message: res.message });
+        else
+            UiHelper.makeNotify({ type: 'success', title: 'Berhasil', message: res.message });
+    });
+    setTimeout(()=>{location.reload()}, 500);
+
+}

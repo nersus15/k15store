@@ -64,6 +64,7 @@ async function dataKeranjang() {
         };
         opt.modalFooter = [
             { type: 'reset', data: 'data-dismiss="modal"', text: 'Tutup', id: "batal", class: "btn btn-empty" },
+            { type: 'button', data: `data-idtr="${barang.idtr}"`, text: 'Hapus', id: "hapus", class: "btn btn-danger" },
             { type: 'button', data: `data-id="${barang.idtr}"`, text: 'Edit', id: "edit", class: "btn btn btn-warning" },
             { type: 'button', data: `data-id="${barang.idtr}"`, text: 'checkout', id: "ck", class: "btn btn btn-primary" },
         ];
@@ -99,7 +100,8 @@ async function caribiaya(ini, origin, berat, ongkir) {
     $("#ongkir-opt").prop('disabled', false).html(opsi).trigger('change');
 }
 
-function checkout(barang) {
+function checkout(event) {
+    const barang = event.data;
     if (!$("#d_alamat").val())
         return;
 
@@ -146,7 +148,28 @@ function checkout(barang) {
     });
 }
 
-async function editdata(barang) {
+function hapus() {
+    const idtr = $(this).data('idtr');
+    $(this).prop('disabled', true);
+    fetch(path + '/api/transaksi/' + idtr, {
+        method: 'DELETE',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+    }).then(res => res.json()).then(res => {
+        $(this).prop('disabled', false);
+        if (res.err)
+            UiHelper.makeNotify({ type: 'danger', title: 'Error', message: res.message });
+        else
+            UiHelper.makeNotify({ type: 'success', title: 'Berhasil', message: res.message });
+    });
+    setTimeout(() => { location.reload() }, 500);
+}
+
+async function editdata(event) {
+    $("#edit, #ck, #batal").prop('disabled', true);
+    const barang = event.data;
     kab = await fetch(path + '/api/kota').then(res => res.json()).then(res => res.rajaongkir.results);
     const { modalId, wrapper, opt } = modalConf.editkeranjang;
     const opsi = {};
@@ -247,6 +270,7 @@ function saatDetailBuka(barang) {
     });
     if (!barang.detail_alamat)
         $("p#detail_alamat").append('<span id="no-da" class="text-danger">Lengkapi alamat pengiriman</span>');
+
     $("#d_alamat").val(barang.detail_alamat);
     $('#kurir').append(` (${barang.service})`);
     $('#detail_alamat').click(function () {
@@ -260,9 +284,7 @@ function saatDetailBuka(barang) {
 
         });
     });
-    $('#ck').click(() => { checkout(barang) });
-    $('#edit').click(function () {
-        $("#edit, #ck, #batal").prop('disabled', true);
-        editdata(barang)
-    })
+    $("#hapus").click(hapus);
+    $('#ck').on('click', barang, checkout);
+    $('#edit').on('click', barang, editdata);
 }
