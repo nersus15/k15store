@@ -127,12 +127,12 @@ class UiHelper {
         let count = $('#notif-count').text();
         item.forEach(i => {
             notif += `
-                <div class="d-flex flex-row mb-3 pb-3 border-bottom">
+                <div class="d-flex flex-row mb-3 pb-3 border-bottom ${!i.tanggal_baca ? 'belum-baca' : 'sudah-baca'}">
                     <div class="pl-3 pr-2">
-                        <a id="${i.id}" class="n-item" href="#">
-                            <p class="font-weight-medium mb-1">${i.judul}</p>
+                        <span id="${i.id}" class="n-item" style="cursor:pointer">
+                            <p class="font-weight-medium mb-1">${!i.tanggal_baca ? '<b>' + i.judul + '</b>' : i.judul}</p>
                             <p class="text-muted mb-0 text-small">${i.tanggal}</p>
-                        </a>
+                        </span>
                     </div>
                 </div>
                 `;
@@ -142,8 +142,9 @@ class UiHelper {
             count = 0;
         else
             count = parseInt(count);
+        let activeItem = $('div.belum-baca').length;
         if(item.length > 0)
-            $('#notif-count').text(item.length).show();
+            $('#notif-count').text(activeItem).show();
 
     }
     static generateModal(modalId, wrapper, opt) {

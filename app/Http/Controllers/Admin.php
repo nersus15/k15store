@@ -32,7 +32,7 @@ class Admin extends Controller
             ['pos' => 'body:end', 'js' => 'js/scripts.js'],
             ['pos' => 'body:end', 'js' => 'js/uihelper.js'],
             ['pos' => 'body:end', 'js' => 'js/modal.config.js'],
-            ['pos' => 'body:end', 'js' => 'js/pembeli.main.js'],
+            ['pos' => 'body:end', 'js' => 'js/admin.main.js'],
 
         )
     ];
@@ -53,7 +53,8 @@ class Admin extends Controller
         return view('template/main-template', $data);
     }
     function order()
-    {
+    {        
+        $this->resource['js'][] = ['pos' => 'body:end', 'js' => 'js/pages/admin.order.js' ];
         $data = array(
             'pageTitle' => 'K15 Store | Situs Jual Beli Online',
             'navbar' => 'comp/navbarAdmin',
@@ -65,6 +66,9 @@ class Admin extends Controller
             'linkActive' => 'order',
             'resources_path' => asset(''),
             'user' => !empty($_SESSION['userdata']) ? $_SESSION['userdata'] : null,
+            'content' => [
+                'admin/order'
+            ]
         );
         return view('template/main-template', $data);
     }

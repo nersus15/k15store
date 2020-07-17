@@ -4,7 +4,7 @@
             <div class="keterangan col-md-12 col-sm-12">                                    
                 <ul style="display: flex; flex-direction: row; padding:0 5px;">
                     <li style="margin:0 5px; align-items: center; list-style: none; display: flex;"><div style="background: red; width: 13px; height: 13px; margin-right: 5px;"></div>Menunggu Pembayaran</li>
-                    <li style="margin:0 5px; align-items: center; list-style: none; display: flex;"><div style="background: orange; width: 13px; height: 13px; margin-right: 5px;"></div>Menunggu Konfirmasi</li>
+                    <li style="margin:0 5px; align-items: center; list-style: none; display: flex;"><div style="background: orange; width: 13px; height: 13px; margin-right: 5px;"></div>Sedang di proses</li>
                     <li style="margin:0 5px; align-items: center; list-style: none; display: flex;"><div style="background: #0b5927; width: 13px; height: 13px; margin-right: 5px;"></div>Sedang di kirim</li>
                     <li style="margin:0 5px; align-items: center; list-style: none; display: flex;"><div style="background: #2fba13; width: 13px; height: 13px; margin-right: 5px;"></div>Selesai</li>
                 </ul>                                   
