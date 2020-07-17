@@ -20,8 +20,6 @@ class Ulasan extends Migration
             $table->string('dari', 100);
             $table->text('ulasan');
             $table->string('gambar', 30)->nullable();
-        });
-        Schema::table('ulasan', function (Blueprint $table) {
             $table->foreign('barang')->references('id')->on('product')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('dari')->references('username')->on('users')->onDelete('cascade')->onUpdate('cascade');
         });

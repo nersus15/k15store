@@ -21,6 +21,10 @@ Route::get('/', ['uses' => 'Pembeli@index']);
 Route::get('/product/{id}', ['uses' => 'Pembeli@detailProduct']);
 Route::get('/keranjang', ['uses' => 'Pembeli@keranjang'])->middleware([notAdmin::class]);
 
+Route::get('/riwayat', ['uses' => 'Pembeli@riwayat'])->middleware(notAdmin::class);
+
 Route::middleware([isAdmin::class])->group(function () {
     Route::get('/admin', ['uses' => 'Admin@index']);
+    Route::get('/admin/order', ['uses' => 'Admin@order']);
+    Route::get('/admin/transaksi', ['uses' => 'Admin@transaksi']);
 });
