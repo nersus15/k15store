@@ -49,7 +49,7 @@ class Pembeli extends Controller
             'css' => $this->resource['css'],
             'js' => $this->resource['js'],
             'storage_path' => asset('storage'),
-            'resources_path' => asset(''),
+            'resources_path' => asset('', true),
             'user' => !empty($_SESSION['userdata']) ? $_SESSION['userdata'] : null,
             'content' => [
                 'public/product'
@@ -76,7 +76,7 @@ class Pembeli extends Controller
             'js' => $this->resource['js'],
             'idProduct' => $id,
             'storage_path' => asset('storage'),
-            'resources_path' => asset(''),
+            'resources_path' => asset('', true),
             'user' => !empty($_SESSION['userdata']) ? $_SESSION['userdata'] : null,
             'content' => [
                 'public/detailProduct'
@@ -96,7 +96,7 @@ class Pembeli extends Controller
             'css' => $this->resource['css'],
             'js' => $this->resource['js'],
             'storage_path' => asset('storage'),
-            'resources_path' => asset(''),
+            'resources_path' => asset('', true),
             'user' => !empty($_SESSION['userdata']) ? $_SESSION['userdata'] : null,
             'content' => [
                 'public/keranjang'
@@ -113,7 +113,7 @@ class Pembeli extends Controller
             'css' => $this->resource['css'],
             'js' => $this->resource['js'],
             'storage_path' => asset('storage'),
-            'resources_path' => asset(''),
+            'resources_path' => asset('', true),
             'user' => !empty($_SESSION['userdata']) ? $_SESSION['userdata'] : null,
             'content' => [
                 'public/riwayat'
