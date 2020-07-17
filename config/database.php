@@ -45,12 +45,12 @@ return [
 
         'mysql' => [
             'driver' => 'mysql',
-            'url' => ('http://185.27.134.10/db_structure.php?db=epiz_26057133_k15store'),
-            'host' => 'sql204.epizy.com',
+            'url' => env('DATABASE_URL', 'https://db4free.net/phpMyAdmin/index.php'),
+            'host' => 'db4free.net',
             'port' => env('DB_PORT', '3306'),
-            'database' => 'epiz_26057133_k15store',
-            'username' => 'epiz_26057133',
-            'password' => '',
+            'database' => 'k15store',
+            'username' => 'kamsciode',
+            'password' => 'kambing15',
             'unix_socket' => env('DB_SOCKET', ''),
             'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',
