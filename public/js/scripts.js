@@ -117,7 +117,7 @@ function loadStyle(href, callback) {
   var theme = resources_path + "/css/dore.light.blue.min.css";
   if (typeof Storage !== "undefined") {
     if (localStorage.getItem("theme")) {
-      theme = localStorage.getItem("theme");
+      theme = resources_path + "/css/" + localStorage.getItem("theme");
     }
   }
 
