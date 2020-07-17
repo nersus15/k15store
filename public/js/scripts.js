@@ -123,7 +123,7 @@ function loadStyle(href, callback) {
 
   $(".theme-color[data-theme='" + theme + "']").addClass("active");
 
-  loadStyle(resources_path + 'css/' + theme, onStyleComplete);
+  loadStyle(theme, onStyleComplete);
   function onStyleComplete() {
     setTimeout(onStyleCompleteDelayed, 300);
   }
