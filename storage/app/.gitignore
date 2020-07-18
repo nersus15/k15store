@@ -1,3 +1,3 @@
-*
+heroku addons:create sftptogo*
 !public/
 !.gitignore
