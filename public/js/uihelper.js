@@ -276,7 +276,8 @@ class UiHelper {
                     var rules = {};
                     var options = {
                         success: succes,
-                        beforeSubmit: sebelumSubmit
+                        beforeSubmit: sebelumSubmit,
+                        method: opt.ajaxMethod
                     };
                     if (opt.rules) {
                         opt.rules.forEach(rule => {
@@ -297,7 +298,7 @@ class UiHelper {
                 this.ajaxSubmit = ajaxSubmit;
                 ajaxSubmit();
             } else {
-                this.instance.validator[modalId.replaceAll('-', '_')] = $("#" + formid).validate();
+                this.instance.validator[modalId.replaceAll('-', '_')] = $("#" + opt.formOpt.formid).validate();
             }
         } else {
             stored = { key: modalId, modal: modalTemplate, modalid: modalId };
@@ -620,7 +621,7 @@ class UiHelper {
                 el[item] = ''
         });
 
-
+        
         if (options) {
             options.forEach((opt, index) => {
                 let dataitem = '';

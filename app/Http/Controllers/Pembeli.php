@@ -123,25 +123,4 @@ class Pembeli extends Controller
         );
         return view('template/main-template', $data);
     }
-    function toko()
-    {
-        if ($_SESSION['userdata']['role'] != 'pedagang')
-            redirect(url(''));
-
-        $this->resource['js'][] = ['pos' => 'body:end', 'js' => 'js/pages/toko.js'];
-        $data = array(
-            'pageTitle' => 'K15 Store | Situs Jual Beli Online',
-            'navbar' => 'comp/navbarPengunjung',
-            'footer' => 'comp/footerPengunjung',
-            'css' => $this->resource['css'],
-            'js' => $this->resource['js'],
-            'storage_path' => asset('storage'),
-            'resources_path' => asset(''),
-            'user' => !empty($_SESSION['userdata']) ? $_SESSION['userdata'] : null,
-            'content' => [
-                'public/riwayat'
-            ]
-        );
-        return view('template/main-template', $data);
-    }
 }

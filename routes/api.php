@@ -95,3 +95,7 @@ Route::get('/notif/count/{user}', function($user){
 Route::put('/notif/baca/{id}', function($id){
     return DB::table('notif')->where('id', $id)->update(['tanggal_baca' => date('Y-m-d H:i:s')]);
 });
+
+Route::get('/product/list/{username}', function($username){
+    return DB::table('product')->where('owner', $username)->get();
+});
