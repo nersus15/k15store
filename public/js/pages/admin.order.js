@@ -3,7 +3,7 @@ $(document).ready(function () {
 });
 
 async function getOrder() {
-    const data = await fetch(path + '/api/riwayat/order/null/null').then(res => res.json()).then(res => res);
+    const data = await fetch(path + '/api/transaksi/order/null/null').then(res => res.json()).then(res => res);
     let rows = '';
     data.forEach((item, index) => {
         rows += `

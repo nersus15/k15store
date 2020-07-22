@@ -62,7 +62,7 @@ function showNotif(event) {
 
 async function keranjangCount() {
     // const fetchParams = { method: 'GET', headers: (headers) };
-    fetch(path + '/api/riwayat/keranjang/' + session.username + '/count').then(res => res.json()).then(res => {
+    fetch(path + '/api/transaksi/keranjang/' + session.username + '/count').then(res => res.json()).then(res => {
         if (res > 0)
             $('#keranjang-count').text(res).show();
     });

@@ -18,10 +18,11 @@ if (!session_id()) session_start();
 // URL::forceSchema('https');
 Route::get('/', ['uses' => 'Pembeli@index']);
 Route::get('/product/{id}', ['uses' => 'Pembeli@detailProduct']);
-Route::get('/keranjang', ['uses' => 'Pembeli@keranjang'])->middleware([notAdmin::class]);
-
-Route::get('/riwayat', ['uses' => 'Pembeli@riwayat'])->middleware(notAdmin::class);
-
+Route::middleware([notAdmin::class])->group(function(){
+    Route::get('/keranjang', ['uses' => 'Pembeli@keranjang']);
+    Route::get('/riwayat', ['uses' => 'Pembeli@riwayat']);
+    Route::get('/toko', ['uses' => 'Pembeli@toko']);
+});
 Route::middleware([isAdmin::class])->group(function () {
     Route::get('/admin', ['uses' => 'Admin@index']);
     Route::get('/admin/order', ['uses' => 'Admin@order']);

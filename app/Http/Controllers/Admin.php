@@ -47,7 +47,7 @@ class Admin extends Controller
             'js' => $this->resource['js'],
             'storage_path' => asset('storage'),
             'linkActive' => 'admin',
-            'resources_path' => asset('', true),
+            'resources_path' => asset(''),
             'user' => !empty($_SESSION['userdata']) ? $_SESSION['userdata'] : null,
         );
         return view('template/main-template', $data);
@@ -64,7 +64,7 @@ class Admin extends Controller
             'js' => $this->resource['js'],
             'storage_path' => asset('storage'),
             'linkActive' => 'order',
-            'resources_path' => asset('', true),
+            'resources_path' => asset(''),
             'user' => !empty($_SESSION['userdata']) ? $_SESSION['userdata'] : null,
             'content' => [
                 'admin/order'
@@ -83,7 +83,7 @@ class Admin extends Controller
             'js' => $this->resource['js'],
             'storage_path' => asset('storage'),
             'linkActive' => 'transaksi',
-            'resources_path' => asset('', true),
+            'resources_path' => asset(''),
             'user' => !empty($_SESSION['userdata']) ? $_SESSION['userdata'] : null,
         );
         return view('template/main-template', $data);

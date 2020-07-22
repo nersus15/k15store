@@ -16,7 +16,7 @@ class notAdmin
     public function handle($request, Closure $next)
     {
         if(empty($_SESSION['userdata']) || $_SESSION['userdata']['role'] == 'admin')
-            return redirect('https://mysterious-wave-47237.herokuapp.com/admin');      
+            return redirect(url(''));      
         else
             return $next($request);
     }

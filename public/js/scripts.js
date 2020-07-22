@@ -114,10 +114,10 @@ function loadStyle(href, callback) {
   var themeColorsDom =
     '<div class="theme-colors"> <div class="p-4"> <p class="text-muted mb-2">Light Theme</p> <div class="d-flex flex-row justify-content-between mb-4"> <a href="#" data-theme="dore.light.blue.min.css" class="theme-color theme-color-blue"></a> <a href="#" data-theme="dore.light.purple.min.css" class="theme-color theme-color-purple"></a> <a href="#" data-theme="dore.light.green.min.css" class="theme-color theme-color-green"></a> <a href="#" data-theme="dore.light.orange.min.css" class="theme-color theme-color-orange"></a> <a href="#" data-theme="dore.light.red.min.css" class="theme-color theme-color-red"></a> </div> <p class="text-muted mb-2">Dark Theme</p> <div class="d-flex flex-row justify-content-between"> <a href="#" data-theme="dore.dark.blue.min.css" class="theme-color theme-color-blue"></a> <a href="#" data-theme="dore.dark.purple.min.css" class="theme-color theme-color-purple"></a> <a href="#" data-theme="dore.dark.green.min.css" class="theme-color theme-color-green"></a> <a href="#" data-theme="dore.dark.orange.min.css" class="theme-color theme-color-orange"></a> <a href="#" data-theme="dore.dark.red.min.css" class="theme-color theme-color-red"></a> </div> </div> <a href="#" class="theme-button"> <i class="simple-icon-magic-wand"></i> </a> </div>';
   $("body").append(themeColorsDom);
-  var theme = resources_path + "/css/dore.light.blue.min.css";
+  var theme = resources_path + "css/dore.light.blue.min.css";
   if (typeof Storage !== "undefined") {
     if (localStorage.getItem("theme")) {
-      theme = resources_path + "/css/" + localStorage.getItem("theme");
+      theme = resources_path + "css/" + localStorage.getItem("theme");
     }
   }
 

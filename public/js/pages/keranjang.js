@@ -7,7 +7,7 @@ $(document).ready(async function () {
 });
 
 async function dataKeranjang() {
-    const data = await fetch(path + '/api/riwayat/keranjang/' + session.username + "/null").then(res => res.json()).then(res => res);
+    const data = await fetch(path + '/api/transaksi/keranjang/' + session.username + "/null").then(res => res.json()).then(res => res);
     if (data.length > 0) {
         let rows = '';
         data.forEach((item, index) => {
