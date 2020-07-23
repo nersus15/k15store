@@ -16,7 +16,7 @@ class notAdmin
     public function handle($request, Closure $next)
     {
         if(empty($_SESSION['userdata']) || $_SESSION['userdata']['role'] == 'admin')
-            return redirect(url(''));      
+            return redirect(url('/admin'));      
         else
             return $next($request);
     }
