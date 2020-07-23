@@ -7,7 +7,7 @@ $(document).ready(async function () {
 });
 
 async function dataKeranjang() {
-    const data = await fetch(path + '/api/riwayat/keranjang/' + session.username + "/null").then(res => res.json()).then(res => res);
+    const data = await fetch(path + '/api/transaksi/keranjang/' + session.username + "/null").then(res => res.json()).then(res => res);
     if (data.length > 0) {
         let rows = '';
         data.forEach((item, index) => {
@@ -116,6 +116,8 @@ function checkout(event) {
             detail_alamat: $("#d_alamat").val(),
             checkout: 'on',
             edit: 'no',
+            barang: barang.id,
+            sisastok: parseInt(barang.stok) - parseInt(barang.jumlah),
             pembeli: session.username,
         })
     }).then(res => {
@@ -197,6 +199,7 @@ async function editdata(event) {
             label: `Jumlah <small class="text-danger">Min:1, Maks: ${barang.stok} </small>`, placeholder: '',
             type: 'number', name: 'jumlah', id: 'jumlah', attr: 'required', attr: `min="1" max="${barang.stok}"`, value: barang.jumlah
         },
+        {name: 'stok', value: barang.stok},
         { id: 'harga', type: 'hidden', value: barang.harga, name: "harga" },
         { id: 'status', type: 'hidden', value: 'bayar', name: "status" },
         { id: 'pembeli', type: 'hidden', value: session.username, name: "pembeli" },
@@ -205,6 +208,8 @@ async function editdata(event) {
         { id: 'destinasi', type: 'hidden', value: barang.destinasi, name: "destinasi" },
         { id: 'method', type: 'hidden', value: 'PUT', name: "_method" },
         { id: 'estimasi', type: 'hidden', value: '', name: "estimasi" },
+        {name: 'barang', value: barang.id},
+        {name: 'sisastok', value: parseInt(barang.stok) - parseInt(barang.jumlah)},
         {
             label: 'Destinasi (Kabupaten/ Kota)', placeholder: '', options: opsi,
             type: 'select', name: 'kab_kota', id: 'kab_kota', class: 'select2', default: barang.destinasi.split(',')[0]
@@ -249,8 +254,9 @@ function saatEditBuka(barang, origin) {
         $('#total-txt').text("Rp. " + total.toString().rupiahFormat());
         $("#destinasi").val($('#kab_kota').val() + ', ' + $('#ongkir-opt option:selected').data('des'));
         $("#total").val(total);
-        $('#service').val($('#ongkir-opt option:selected').data('serv'))
+        $('#service').val($('#ongkir-opt option:selected').data('serv'));
         $('#estimasi').val($('#ongkir-opt option:selected').data('etd'));
+        $('#sisastok').val(parseInt($('#stok').val()) - parseInt(jumlah));
     });
     $(".select2").select2();
     $("#kurir-opt").trigger('change');

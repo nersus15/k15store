@@ -35,13 +35,13 @@ class Pembeli extends Controller
             ['pos' => 'body:end', 'js' => 'js/uihelper.js'],
             ['pos' => 'body:end', 'js' => 'js/modal.config.js'],
             ['pos' => 'body:end', 'js' => 'js/pembeli.main.js'],
-            
+
         )
     ];
     function index()
     {
         $this->resource['js'][] =  ['pos' => 'body:end', 'js' => 'js/pages/product.js'];
-           
+
         $data = array(
             'pageTitle' => 'K15 Store | Situs Jual Beli Online',
             'navbar' => 'comp/navbarPengunjung',
@@ -49,7 +49,7 @@ class Pembeli extends Controller
             'css' => $this->resource['css'],
             'js' => $this->resource['js'],
             'storage_path' => asset('storage'),
-            'resources_path' => asset('', true),
+            'resources_path' => asset(''),
             'user' => !empty($_SESSION['userdata']) ? $_SESSION['userdata'] : null,
             'content' => [
                 'public/product'
@@ -62,8 +62,8 @@ class Pembeli extends Controller
     function detailProduct($id)
     {
 
-        $this->resource['js'][] = ['pos' => 'body:end', 'js' => 'js/vendor/slick.min.js' ];
-        $this->resource['js'][] = ['pos' => 'body:end', 'js' => 'js/vendor/select2.full.js' ];
+        $this->resource['js'][] = ['pos' => 'body:end', 'js' => 'js/vendor/slick.min.js'];
+        $this->resource['js'][] = ['pos' => 'body:end', 'js' => 'js/vendor/select2.full.js'];
         $this->resource['js'][] = ['pos' => 'body:end', 'js' => 'js/pages/detail.product.js'];
         $this->resource['css'][] = ['pos' => 'head', 'css' => 'css/vendor/slick.css'];
         $this->resource['css'][] = ['pos' => 'head', 'css' => 'css/vendor/select2.min.css'];
@@ -76,7 +76,7 @@ class Pembeli extends Controller
             'js' => $this->resource['js'],
             'idProduct' => $id,
             'storage_path' => asset('storage'),
-            'resources_path' => asset('', true),
+            'resources_path' => asset(''),
             'user' => !empty($_SESSION['userdata']) ? $_SESSION['userdata'] : null,
             'content' => [
                 'public/detailProduct'
@@ -84,10 +84,11 @@ class Pembeli extends Controller
         );
         return view('template/main-template', $data);
     }
-    
-    function keranjang(){
+
+    function keranjang()
+    {
         $this->resource['css'][] = ['pos' => 'head', 'css' => 'css/vendor/select2.min.css'];
-        $this->resource['js'][] = ['pos' => 'body:end', 'js' => 'js/vendor/select2.full.js' ];
+        $this->resource['js'][] = ['pos' => 'body:end', 'js' => 'js/vendor/select2.full.js'];
         $this->resource['js'][] = ['pos' => 'body:end', 'js' => 'js/pages/keranjang.js'];
         $data = array(
             'pageTitle' => 'K15 Store | Situs Jual Beli Online',
@@ -96,7 +97,7 @@ class Pembeli extends Controller
             'css' => $this->resource['css'],
             'js' => $this->resource['js'],
             'storage_path' => asset('storage'),
-            'resources_path' => asset('', true),
+            'resources_path' => asset(''),
             'user' => !empty($_SESSION['userdata']) ? $_SESSION['userdata'] : null,
             'content' => [
                 'public/keranjang'
@@ -104,7 +105,8 @@ class Pembeli extends Controller
         );
         return view('template/main-template', $data);
     }
-    function riwayat(){
+    function riwayat()
+    {
         $this->resource['js'][] = ['pos' => 'body:end', 'js' => 'js/pages/riwayat.js'];
         $data = array(
             'pageTitle' => 'K15 Store | Situs Jual Beli Online',
@@ -113,7 +115,7 @@ class Pembeli extends Controller
             'css' => $this->resource['css'],
             'js' => $this->resource['js'],
             'storage_path' => asset('storage'),
-            'resources_path' => asset('', true),
+            'resources_path' => asset(''),
             'user' => !empty($_SESSION['userdata']) ? $_SESSION['userdata'] : null,
             'content' => [
                 'public/riwayat'

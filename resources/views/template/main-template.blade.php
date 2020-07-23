@@ -9,7 +9,7 @@
         @if(isset($css))
            @foreach ($css as $item)
                 @if ($item['pos'] == 'head')
-                    <link rel="stylesheet" href="{!! asset($item['css'], true) !!}">
+                    <link rel="stylesheet" href="{!! asset($item['css']) !!}">
                 @endif               
            @endforeach
         @endif
@@ -17,7 +17,7 @@
         @if (isset($js))
             @foreach ($js as $item)
                 @if ($item['pos'] == 'head')
-                    <script src="{!! asset($item['js'], true) !!}"></script>
+                    <script src="{!! asset($item['js']) !!}"></script>
                 @endif  
                 
             @endforeach
@@ -54,7 +54,7 @@
     @if (isset($js))
         @foreach ($js as $item)
             @if ($item['pos'] == 'body:end')
-                <script src="{!! asset($item['js'], true) !!}"></script>
+                <script src="{!! asset($item['js']) !!}"></script>
             @endif  
             
         @endforeach

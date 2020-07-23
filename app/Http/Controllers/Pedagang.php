@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class Admin extends Controller
+class Pedagang extends Controller
 {
+    //
     protected $resource = [
         'css' => array(
+            // ['pos' => 'head', 'css' => 'css/app.css'],
             ['pos' => 'head', 'css' => 'font/iconsmind/style.css'],
             ['pos' => 'head', 'css' => 'font/simple-line-icons/css/simple-line-icons.css'],
             ['pos' => 'head', 'css' => 'css/vendor/bootstrap.min.css'],
@@ -32,61 +34,46 @@ class Admin extends Controller
             ['pos' => 'body:end', 'js' => 'js/scripts.js'],
             ['pos' => 'body:end', 'js' => 'js/uihelper.js'],
             ['pos' => 'body:end', 'js' => 'js/modal.config.js'],
-            ['pos' => 'body:end', 'js' => 'js/admin.main.js'],
+            ['pos' => 'body:end', 'js' => 'js/pembeli.main.js'],
 
         )
     ];
-    function index()
-    {
+
+    // function index()
+    // {
+    
+    //     $this->resource['js'][] = ['pos' => 'body:end', 'js' => 'js/pages/transaksi.js'];
+    //     $data = array(
+    //         'pageTitle' => 'K15 Store | Situs Jual Beli Online',
+    //         'navbar' => 'comp/navbarPengunjung',
+    //         'footer' => 'comp/footerPengunjung',
+    //         'css' => $this->resource['css'],
+    //         'js' => $this->resource['js'],
+    //         'storage_path' => asset('storage'),
+    //         'resources_path' => asset(''),
+    //         'user' => !empty($_SESSION['userdata']) ? $_SESSION['userdata'] : null,
+    //         'content' => [
+    //             'public/transaksi'
+    //         ]
+    //     );
+    //     return view('template/main-template', $data);
+    // }
+    function index(){
+        $this->resource['js'][] = ['pos' => 'body:end', 'js' => 'js/pages/toko.js'];
         $data = array(
             'pageTitle' => 'K15 Store | Situs Jual Beli Online',
-            'navbar' => 'comp/navbarAdmin',
-            'sidebar' => 'comp/sidebarAdmin',
+            'navbar' => 'comp/navbarPengunjung',
             'footer' => 'comp/footerPengunjung',
             'css' => $this->resource['css'],
             'js' => $this->resource['js'],
             'storage_path' => asset('storage'),
-            'linkActive' => 'admin',
-            'resources_path' => asset(''),
-            'user' => !empty($_SESSION['userdata']) ? $_SESSION['userdata'] : null,
-        );
-        return view('template/main-template', $data);
-    }
-    function order()
-    {        
-        $this->resource['js'][] = ['pos' => 'body:end', 'js' => 'js/pages/admin.order.js' ];
-        $data = array(
-            'pageTitle' => 'K15 Store | Situs Jual Beli Online',
-            'navbar' => 'comp/navbarAdmin',
-            'sidebar' => 'comp/sidebarAdmin',
-            'footer' => 'comp/footerPengunjung',
-            'css' => $this->resource['css'],
-            'js' => $this->resource['js'],
-            'storage_path' => asset('storage'),
-            'linkActive' => 'order',
             'resources_path' => asset(''),
             'user' => !empty($_SESSION['userdata']) ? $_SESSION['userdata'] : null,
             'content' => [
-                'admin/order'
+                'public/barang',
+                'public/transaksi'
             ]
         );
         return view('template/main-template', $data);
     }
-    function transaksi()
-    {
-        $data = array(
-            'pageTitle' => 'K15 Store | Situs Jual Beli Online',
-            'navbar' => 'comp/navbarAdmin',
-            'sidebar' => 'comp/sidebarAdmin',
-            'footer' => 'comp/footerPengunjung',
-            'css' => $this->resource['css'],
-            'js' => $this->resource['js'],
-            'storage_path' => asset('storage'),
-            'linkActive' => 'transaksi',
-            'resources_path' => asset(''),
-            'user' => !empty($_SESSION['userdata']) ? $_SESSION['userdata'] : null,
-        );
-        return view('template/main-template', $data);
-    }
-    
 }

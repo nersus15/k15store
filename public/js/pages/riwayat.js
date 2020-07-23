@@ -7,7 +7,7 @@ async function getRiwayat() {
         'selesai': '#2fba13',
         'konfirmasi': 'orange'
     }
-    const data = await fetch(path + '/api/riwayat/riwayat/' + session.username + '/null').then(res => res.json()).then(res => res);
+    const data = await fetch(path + '/api/transaksi/riwayat/' + session.username + '/null').then(res => res.json()).then(res => res);
     if (data.length > 0) {
         let rows = '';
         data.forEach((item, index) => {
@@ -35,9 +35,10 @@ async function getRiwayat() {
 function bayar(event) {
     const thumbnail = $(this).data('thumbnail');
     const { modalId, wrapper, opt } = modalConf.keranjang;
-    const barang = event.data[$(this).data('barang')];   
+    const barang = event.data[$(this).data('barang')];
     const status = barang.status;
-    const total = 'Rp. ' + barang.total.toString().rupiahFormat(); if (status != 'bayar')
+    const total = 'Rp. ' + barang.total.toString().rupiahFormat();
+    if (status == 'kirim' || status == 'selesai' || status == 'keranjang')
         return;
 
     opt.modalId = "riwayat";
@@ -45,6 +46,7 @@ function bayar(event) {
     opt.modalSubtitle = barang.nama_product;
     opt.saatBuka = () => {
         $('#batalkan').click(saatBuka);
+        $('#selesai').on('click', barang, selesai);
     }
     opt.modalBody = {
         customBody: `
@@ -66,8 +68,30 @@ function bayar(event) {
     };
     opt.modalFooter = [
         { type: 'reset', data: 'data-dismiss="modal"', text: 'Tutup', id: "batal", class: "btn btn-empty" },
-        { type: 'button', data: `data-id="${barang.idtr}"`, text: 'Batalkan', id: "batalkan", class: "btn btn btn-outline-danger" },
     ];
+    if (status == 'bayar') {
+        opt.modalFooter.push(
+            { type: 'button', data: `data-id="${barang.idtr}"`, text: 'Batalkan', id: "batalkan", class: "btn btn btn-outline-danger" },
+        );
+    } else if (status == 'kirim') {
+        opt.modalBody.customBody =
+            `<div class="row">
+                <div class="">
+                    <img src="${storage_path + '/images/product/' + thumbnail}" alt="thumbnail"/>
+                </div>
+                <div class="col ml-2 mt-2">
+                    <p style="overflow: auto" class="text-muted row" id="nama_product">
+                       Barang anda sudah sampai
+                    </p>
+                    <hr>             
+                </div>
+            </div>
+            `,
+
+            opt.modalFooter.push(
+                { type: 'button', data: `data-id="${barang.idtr}"`, text: 'Selesai', id: "selesai", class: "btn btn btn-outline-primary" },
+            );
+    }
     UiHelper.generateModal(modalId, wrapper, opt);
 };
 
@@ -87,6 +111,34 @@ function saatBuka() {
         else
             UiHelper.makeNotify({ type: 'success', title: 'Berhasil', message: res.message });
     });
-    setTimeout(()=>{location.reload()}, 500);
+    setTimeout(() => { location.reload() }, 500);
+
+}
+function selesai(ev) {
+    const idtr = $(this).data('id');
+    $(this).prop('disabled', true);
+    fetch(path + '/api/transaksi/' + idtr, {
+        method: 'PUT',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            _token: $('meta[name="_token"]').attr('content'),
+            edit: 'no',
+            selesai: 'yes',
+            idbrng: ev.data.id,
+            namabrng: ev.data.nama_product,
+            penjual: ev.data.owner,
+            pembeli: session.username
+        })
+    }).then(res => res.json()).then(res => {
+        $(this).prop('disabled', false);
+        if (res.err)
+            UiHelper.makeNotify({ type: 'danger', title: 'Error', message: res.message });
+        else
+            UiHelper.makeNotify({ type: 'success', title: 'Berhasil', message: res.message });
+    });
+    // setTimeout(() => { location.reload() }, 500);
 
 }

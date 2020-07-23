@@ -88,10 +88,14 @@ Route::get('/cost/{origin}/{dest}/{weight}/{courier}', function($origin, $dest, 
 
 Route::resources(['product' => 'Product', 'ulasan' => 'Ulasan', 'transaksi' => 'Transaksi']);
 Route::get('/product/ulasan/{product}', ['uses' => 'Ulasan@index']);
-Route::get('/riwayat/{status}/{pembeli}/{opsi}', ['uses' => 'Transaksi@transaksi']);
+Route::get('/transaksi/{status}/{pembeli}/{opsi}', ['uses' => 'Transaksi@transaksi']);
 Route::get('/notif/count/{user}', function($user){
     return DB::table('notif')->where('pembaca', $user)->orderBy('tanggal', 'desc')->get();
 });
 Route::put('/notif/baca/{id}', function($id){
     return DB::table('notif')->where('id', $id)->update(['tanggal_baca' => date('Y-m-d H:i:s')]);
+});
+
+Route::get('/product/list/{username}', function($username){
+    return DB::table('product')->where('owner', $username)->get();
 });

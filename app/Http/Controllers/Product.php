@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Psy\Util\Json;
+use Illuminate\Support\Str;
 
 class Product extends Controller
 {
@@ -16,7 +17,7 @@ class Product extends Controller
     public function index()
     {
         //
-        if(!empty($_SESSION['userdata']))
+        if (!empty($_SESSION['userdata']))
             return DB::table('product')->where('owner', '!=', $_SESSION['userdata']['username'])->paginate(8);
         else
             return DB::table('product')->paginate(8);
@@ -40,16 +41,51 @@ class Product extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if (!isset($_SESSION['userdata']) || $_SESSION['userdata']['role'] != 'pedagang')
+            return response("Anda tidak memiliki akses!", 401);
+        $post = [
+            'id' => Str::random(5),
+            'nama_product' => $request->nama_barang,
+            'owner' => $request->owner,
+            'harga' => $request->harga,
+            'stok' => $request->stok,
+            'kategori' => $request->kategori,
+            'berat' => $request->berat,
+            'kondisi' => $request->kondisi,
+            'batas_beli' => $request->batas_beli,
+            'deskripsi' => $request->deskripsi
+        ];
+
+        try {
+            DB::table('product')->insert($post);
+            $res = [
+                'message' => 'Berhasil menambahkan barang baru'
+            ];
+            $notif = [
+                'id' => Str::random(5),
+                'tanggal' => date('Y-m-d H:i:s'),
+                'judul' => 'Berhasil Menambah Barang',
+                'pesan' => 'Anda telah Menambahkan barang dengan nama ' . $request->nama_barang,
+                'pembaca' => $request->owner
+            ];
+            DB::table('notif')->insert($notif);
+        } catch (\Throwable $th) {
+            $res = [
+                'message' => 'Terjadi kesalahan',
+                'err' => $th
+            ];
+        }
+
+        return $res;
     }
 
-    
+
     public function show($id)
-    {   
+    {
         $product = DB::table('product')
-                    ->where('product.id', $id)
-                    ->join('users', 'users.username', '=', 'product.owner', 'inner')
-                    ->get();
+            ->where('product.id', $id)
+            ->join('users', 'users.username', '=', 'product.owner', 'inner')
+            ->get();
         return Json::encode($product[0]);
     }
 
@@ -73,7 +109,40 @@ class Product extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        if (!isset($_SESSION['userdata']) || $_SESSION['userdata']['role'] != 'pedagang')
+            return response("Anda tidak memiliki akses!", 401);
+        $post = [
+            'nama_product' => $request->nama_barang,
+            'harga' => $request->harga,
+            'stok' => $request->stok,
+            'kategori' => $request->kategori,
+            'berat' => $request->berat,
+            'kondisi' => $request->kondisi,
+            'batas_beli' => $request->batas_beli,
+            'deskripsi' => $request->deskripsi
+        ];
+
+        try {
+            DB::table('product')->where('id', $id)->update($post);
+            $res = [
+                'message' => 'Berhasil Update barang dengan id' . $id . '(' . $request->nama_barang . ')',
+            ];
+            $notif = [
+                'id' => Str::random(5),
+                'tanggal' => date('Y-m-d H:i:s'),
+                'judul' => 'Berhasil Update Barang',
+                'pesan' => 'Anda telah Memperbarui barang dengan nama' . $request->nama_barang,
+                'pembaca' => $request->owner
+            ];
+            DB::table('notif')->insert($notif);
+        } catch (\Throwable $th) {
+            $res = [
+                'message' => 'Terjadi kesalahan',
+                'err' => $th
+            ];
+        }
+
+        return $res;
     }
 
     /**
@@ -84,6 +153,28 @@ class Product extends Controller
      */
     public function destroy($id)
     {
-        //
+        if (!isset($_SESSION['userdata']) || $_SESSION['userdata']['role'] != 'pedagang')
+            return response("Anda tidak memiliki akses!", 401);
+        try {
+            DB::table('product')->where('id', $id)->delete();
+            $res = [
+                'message' => 'Berhasil Hapus barang dengan id' . $id,
+            ];
+            $notif = [
+                'id' => Str::random(5),
+                'tanggal' => date('Y-m-d H:i:s'),
+                'judul' => 'Berhasil Hapus Barang',
+                'pesan' => 'Anda telah Menghapus barang dengan id' . $id,
+                'pembaca' => $_SESSION['userdata']['username'],
+            ];
+            DB::table('notif')->insert($notif);
+        } catch (\Throwable $th) {
+            $res = [
+                'message' => 'Terjadi kesalahan',
+                'err' => $th
+            ];
+        }
+
+        return $res;
     }
 }

@@ -4,7 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 
-class isAdmin
+class isPedagang
 {
     /**
      * Handle an incoming request.
@@ -15,7 +15,7 @@ class isAdmin
      */
     public function handle($request, Closure $next)
     {
-        if(empty($_SESSION['userdata']) || $_SESSION['userdata']['role'] != 'admin')
+        if(empty($_SESSION['userdata']) || $_SESSION['userdata']['role'] != 'pedagang')
             return redirect(url(''));      
         else
             return $next($request);

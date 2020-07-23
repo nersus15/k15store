@@ -6,6 +6,7 @@ $(document).ready(function () {
     fetchProduct(idproduct).then(function (data) {
         let stok = data.stok.split(' ');
         stok = stok[stok.length - 1];
+        let batas = data.batas_beli
 
         // Init slick carousel
         $('.carousel').slick({ arrows: false });
@@ -26,7 +27,7 @@ $(document).ready(function () {
             }
 
             if (value > parseInt(stok)) {
-                notifyConf.message = 'Jumlah pembelian tidak boleh melebihi stok (' + stok + ')';
+                notifyConf.message = 'Jumlah pembelian tidak boleh melebihi batas (' + batas + ')';
                 UiHelper.makeNotify(notifyConf);
                 $("#jumlah").val(1)
 
@@ -47,8 +48,8 @@ $(document).ready(function () {
                 UiHelper.makeNotify(notifyConf);
                 return;
             }
-            if (value >= parseInt(stok)) {
-                notifyConf.toastMessage = 'Jumlah pembelian tidak boleh melebihi stok (' + stok + ')';
+            if (value >= parseInt(batas)) {
+                notifyConf.message = 'Jumlah pembelian tidak boleh melebihi batas (' + batas + ')';
                 UiHelper.makeNotify(notifyConf);
                 return;
             }
