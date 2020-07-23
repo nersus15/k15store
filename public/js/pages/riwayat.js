@@ -38,7 +38,7 @@ function bayar(event) {
     const barang = event.data[$(this).data('barang')];
     const status = barang.status;
     const total = 'Rp. ' + barang.total.toString().rupiahFormat();
-    if (status == 'bayar' || status == 'selesai' || status == 'keranjang')
+    if (status == 'kirim' || status == 'selesai' || status == 'keranjang')
         return;
 
     opt.modalId = "riwayat";

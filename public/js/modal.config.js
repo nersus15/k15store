@@ -33,6 +33,8 @@ const modalConf = {
                     const { modalId, wrapper, opt } = modalConf.formregister;
                     UiHelper.generateModal(modalId, wrapper, opt);
                 });
+
+                
             },
             saatTutup: () => {
                 $("#daftar").off('click');
@@ -65,6 +67,97 @@ const modalConf = {
             },
         }
     },
+    "form_tambah_barang": {
+        modalId: "modal-form-add-barang",
+        wrapper: ".generated-modals",
+        instance: {},
+        opt: {
+            rules: [
+                {
+                    name: 'batas',
+                    method: function (value, element) { return value <= $('#stok').val(); },
+                    message: "Batas beli harus kurang atau sama dengan stok",
+                    field: 'batas_beli'
+                }
+            ],
+            type: 'form',
+            open: true,
+            destroy: true,
+            ajax: true,
+            modalPos: 'right',
+            saatBuka: () => {
+                var token = $('meta[name="_token"]').attr('content');
+                $("#" + modalConf.form_tambah_barang.opt.formOpt.formId + " #token").val(token);
+                $("#stok").change(function () {
+                    if (!$('#batas_beli').val())
+                        $('#batas_beli').val($(this).val());
+                });
+            },
+            submitSuccess: (res) => {
+                if (res.err)
+                    $('#' + modalConf.formlogin.opt.formOpt.formId + ' #alert_danger').html(`<p>${res.massage}</p>`).show();
+                else
+                    window.location.reload();
+            },
+            saatTutup: () => {
+                $('body').removeClass('modal-open');
+             },
+            formOpt: {
+                enctype: 'multipart/form-data',
+                formId: "form-add-barang",
+                formAct: "/api/product",
+                formMethod: 'POST',
+                formAttr: ''
+            },
+            modalTitle: "Tambah Barang",
+            modalBody: {
+                input: [
+                    {
+                        label: 'Nama Barang', placeholder: 'Masukkan Nama Barang',
+                        type: 'text', name: 'nama_barang', id: 'nama_barang', attr: 'required'
+                    },
+                    {
+                        label: 'Deskripsi', placeholder: 'Masukkan Deskripsi',
+                        type: 'textarea', name: 'deskripsi', id: 'deskripsi'
+                    },
+                    {
+                        label: 'Harga', placeholder: 'Masukkan harga',
+                        type: 'number', name: 'harga', id: 'harga', attr: 'required'
+                    },
+                    {
+                        label: 'Stok', placeholder: 'Masukkan stok',
+                        type: 'number', name: 'stok', id: 'stok', attr: 'required'
+                    },
+                    {
+                        label: 'Berat', placeholder: 'Masukkan berat dalam gram',
+                        type: 'number', name: 'berat', id: 'berat'
+                    },
+                    {
+                        label: 'Kategori', placeholder: 'Masukkan Kategori',
+                        type: 'text', name: 'kategori', id: 'kategori',
+                    },
+                    {
+                        label: 'Kondisi', type: 'select', name: 'kondisi', id: 'kondisi',
+                        options: {
+                            'baru': { text: 'Baru' },
+                            'bekas': { text: 'Bekas' },
+                        }
+                    },
+                    {
+                        label: 'Batas Pembelian', placeholder: 'Masukkan Batas pembelian',
+                        type: 'number', name: 'batas_beli', id: 'batas_beli'
+                    },
+                    {
+                        type: 'hidden', name: '_token', id: 'token'
+                    }
+                ],
+                buttons: [
+                    { type: 'reset', data: 'data-dismiss="modal"', text: 'Batal', id: "batal", class: "btn btn btn-warning" },
+                    { type: 'submit', text: 'Tambah', id: "add", class: "btn btn btn-primary" }
+                ]
+            },
+        }
+    },
     "formregister": {
         modalId: "modal-form-register",
         wrapper: ".generated-modals",
@@ -79,7 +172,7 @@ const modalConf = {
                 $('#' + modalConf.formlogin.modalId).modal('hide');
                 setTimeout(function () {
                     $('body').addClass('modal-open');
-                }, 1000)
+                }, 1000);
             },
             saatTutup: () => { },
             formOpt: {

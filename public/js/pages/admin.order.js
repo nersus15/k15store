@@ -59,7 +59,7 @@ function bukaModal(event) {
     };
     opt.modalFooter = [
         { type: 'reset', data: 'data-dismiss="modal"', text: 'Tutup', id: "batal", class: "btn btn-empty" },
-        { type: 'button', data: `data-id="${barang.idtr}" data-pembeli="${barang.pembeli}" data-penjual="${barang.owner}"`, text: 'Konfirmasi', id: "konfirmasi", class: "btn btn btn-primary" },
+        { type: 'button', data: `data-id="${barang.idtr}" data-barang="${barang.id}" data-sisastok= "${parseInt(barang.stok) - parseInt(barang.jumlah)}" data-terjual= "${parseInt(barang.terjual) + parseInt(barang.jumlah)}" data-pembeli="${barang.pembeli}" data-penjual="${barang.owner}"`, text: 'Konfirmasi', id: "konfirmasi", class: "btn btn btn-primary" },
     ];
     UiHelper.generateModal(modalId, wrapper, opt);
 }
@@ -78,7 +78,10 @@ function saatBuka() {
                     _token: $('meta[name="_token"]').attr('content'),
                     konfirmasi: true,
                     pembeli:  $(this).data('pembeli'),
-                    penjual: $(this).data('penjual')
+                    penjual: $(this).data('penjual'),
+                    barang: $(this).data('barang'),
+                    sisastok: $(this).data('sisastok'),
+                    terjual:$(this).data('terjual'),
                 })
             }
         ).then(res => res.json()).then(res => {

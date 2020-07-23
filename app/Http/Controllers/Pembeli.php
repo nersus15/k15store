@@ -123,6 +123,7 @@ class Pembeli extends Controller
         );
         return view('template/main-template', $data);
     }
+<<<<<<< HEAD
     function toko()
     {
         if ($_SESSION['userdata']['role'] != 'pedagang')
@@ -144,4 +145,6 @@ class Pembeli extends Controller
         );
         return view('template/main-template', $data);
     }
+=======
+>>>>>>> 47cbd3a4d077d84879530eaf519cd1659049033f
 }

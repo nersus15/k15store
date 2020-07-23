@@ -11,7 +11,7 @@ $("#logout").click(function () {
         window.location.reload();
     })
 });
-
+$('#toko-btn').click(()=> { location.href = path + '/toko'});
 $('#keranjang-btn').click(function () {
     if (window.location.pathname == '/keranjang' || !session) {
         if (!session)

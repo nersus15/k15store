@@ -154,6 +154,7 @@ class Transaksi extends Controller
                     'tanggal_update' => date('Y-m-d H:i:s'),
                     'status' => 'bayar'
                 ];
+            } else {
                 $post = [
                     'status' => 'bayar',
                     'detail_alamat' => $request->detail_alamat,
@@ -177,7 +178,7 @@ class Transaksi extends Controller
             $notif['judul'] = "Memperbaruai transaksi dengan id <b>" . $id . '</b>';
             $notif['pembaca'] = $request->pembeli;
         }
-        if(isset($request->kirim) && $request->kirim == 'yes'){
+        if (isset($request->kirim) && $request->kirim == 'yes') {
             $post = [
                 'tanggal_update' => date('Y-m-d H:i:s'),
                 'status' => 'kirim',
@@ -187,19 +188,19 @@ class Transaksi extends Controller
                     'id' => Str::random(5),
                     'tanggal' => date('Y-m-d H:i:s'),
                     'judul' => 'Pemberitahuan',
-                    'pesan' => 'Anda telah mengirim barang dengan id '. $request->idbrng . '(' . $request->namabrng . ')',
+                    'pesan' => 'Anda telah mengirim barang dengan id ' . $request->idbrng . '(' . $request->namabrng . ')',
                     'pembaca' => $request->penjual
                 ],
                 [
                     'id' => Str::random(5),
                     'tanggal' => date('Y-m-d H:i:s'),
                     'judul' => 'Pemberitahuan Pengiriman',
-                    'pesan' => 'Barang yang anda pesan dengan id '. $request->idbrng . '(' . $request->namabrng . ')',
+                    'pesan' => 'Barang yang anda pesan dengan id ' . $request->idbrng . '(' . $request->namabrng . ')',
                     'pembaca' => $request->pembeli
                 ],
             ];
         }
-        if(isset($request->selesai) && $request->selesai == 'yes'){
+        if (isset($request->selesai) && $request->selesai == 'yes') {
             $post = [
                 'tanggal_update' => date('Y-m-d H:i:s'),
                 'status' => 'selesai',
@@ -209,19 +210,20 @@ class Transaksi extends Controller
                     'id' => Str::random(5),
                     'tanggal' => date('Y-m-d H:i:s'),
                     'judul' => 'Pemberitahuan',
-                    'pesan' => 'Barang dengan id '. $request->idbrng . '(' . $request->namabrng . ') sudah diterima oleh pembeli',
+                    'pesan' => 'Barang dengan id ' . $request->idbrng . '(' . $request->namabrng . ') sudah diterima oleh pembeli',
                     'pembaca' => $request->penjual
                 ],
                 [
                     'id' => Str::random(5),
                     'tanggal' => date('Y-m-d H:i:s'),
                     'judul' => 'Pemberitahuan Pesanan',
-                    'pesan' => 'Barang yang anda pesan dengan id '. $request->idbrng . '(' . $request->namabrng . ') telah diterima',
+                    'pesan' => 'Barang yang anda pesan dengan id ' . $request->idbrng . '(' . $request->namabrng . ') telah diterima',
                     'pembaca' => $request->pembeli
                 ],
             ];
         }
         if (isset($request->konfirmasi) && $request->konfirmasi) {
+            DB::table('product')->where('id', $request->barang)->update(['stok' => $request->sisastok, 'terjual' => $request->terjual]);
             $post = [
                 'tanggal_update' => date('Y-m-d H:i:s'),
                 'status' => 'konfirmasi',
@@ -242,6 +244,7 @@ class Transaksi extends Controller
                     'pembaca' => $request->pembeli
                 ],
             ];
+
         }
         try {
             DB::table('transaksi')->where('id', $id)->update($post);
