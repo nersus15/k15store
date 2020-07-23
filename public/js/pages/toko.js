@@ -168,7 +168,7 @@ function lihatDetailBarang(ev) {
     UiHelper.generateModal(modalId, wrapper, opt);
 }
 function tambahBarang() {
-    const { modalId, wrapper, opt } = modalConf.form_tambah_barang;
+    let { modalId, wrapper, opt } = modalConf.form_tambah_barang;
     modalId = "modal-form-add-barang",
         wrapper = ".generated-modals",
         opt.formOpt = {

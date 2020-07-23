@@ -30,7 +30,7 @@ async function dataKeranjang() {
     $(".detail").click(function () {
         let barang = data[$(this).data('barang')];
         let thumbnail = barang.gambar.split(';');
-        const { modalId, wrapper, opt } = modalConf.keranjang;
+        let { modalId, wrapper, opt } = modalConf.keranjang;
         barang.detail_alamat = !barang.detail_alamat ? `` : barang.detail_alamat;
         barang.kurir = barang.kurir.toUpperCase();
         opt.saatBuka = () => {
@@ -173,7 +173,7 @@ async function editdata(event) {
     $("#edit, #ck, #batal").prop('disabled', true);
     const barang = event.data;
     kab = await fetch(path + '/api/kota').then(res => res.json()).then(res => res.rajaongkir.results);
-    const { modalId, wrapper, opt } = modalConf.editkeranjang;
+    let { modalId, wrapper, opt } = modalConf.editkeranjang;
     const opsi = {};
     const idbr =
         opt.formOpt.formAct += '/' + barang.idtr;
