@@ -34,7 +34,7 @@ async function getRiwayat() {
 
 function bayar(event) {
     const thumbnail = $(this).data('thumbnail');
-    const { modalId, wrapper, opt } = modalConf.keranjang;
+    let { modalId, wrapper, opt } = modalConf.keranjang;
     const barang = event.data[$(this).data('barang')];
     const status = barang.status;
     const total = 'Rp. ' + barang.total.toString().rupiahFormat();

@@ -168,7 +168,7 @@ function lihatDetailBarang(ev) {
     UiHelper.generateModal(modalId, wrapper, opt);
 }
 function tambahBarang() {
-    const { modalId, wrapper, opt } = modalConf.form_tambah_barang;
+    let { modalId, wrapper, opt } = modalConf.form_tambah_barang;
     modalId = "modal-form-add-barang",
         wrapper = ".generated-modals",
         opt.formOpt = {
@@ -271,7 +271,7 @@ async function getTransaksi() {
 
 function konfirmasi(event) {
     const thumbnail = $(this).data('thumbnail');
-    const { modalId, wrapper, opt } = modalConf.keranjang;
+    let { modalId, wrapper, opt } = modalConf.keranjang;
     const barang = event.data[$(this).data('barang')];
     const status = barang.status;
 
