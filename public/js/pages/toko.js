@@ -178,6 +178,8 @@ function tambahBarang() {
             formMethod: 'POST',
             formAttr: ''
         };
+    opt.modalTitle = "Tambah Barang";
+    opt.modalSubtitle = '';
     opt.saatBuka = () => {
         var token = $('meta[name="_token"]').attr('content');
         $("#" + modalConf.form_tambah_barang.opt.formOpt.formId + " #token").val(token);
