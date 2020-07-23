@@ -17,6 +17,7 @@ class Product extends Controller
     public function index()
     {
         //
+        dd(DB::connection());
         if (!empty($_SESSION['userdata']))
             return DB::table('product')->where('owner', '!=', $_SESSION['userdata']['username'])->paginate(8);
         else
