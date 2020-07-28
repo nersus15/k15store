@@ -104,10 +104,18 @@ Route::get('/product/list/{username}', function ($username) {
 Route::put('/akun/update/', function () {
     if (!isset($_SESSION['userdata']) || $_SESSION['userdata']['role'] != 'pembeli')
         return response('Anda tidak memiliki akses!', 401);
-    try{
+    try {
         DB::table('users')->where('username', $_SESSION['userdata']['username'])->update(['role' => 'pedagang']);
         return response(['message' => 'Berhasil, sekarang anda adalah pedagang']);
-    }catch(Throwable $err){
+    } catch (Throwable $err) {
         return response(['message' => 'Terjadi kesalahan', 'err' => $err]);
+    }
+});
+
+Route::get('/user/{username}', function($username){
+    try {
+        return response(DB::table('users')->where('username', $username)->get());
+        } catch (\Throwable $th) {
+            return response(['message' => 'Terjadi kesalahan', 'err' => $th]);
     }
 });
