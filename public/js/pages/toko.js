@@ -41,7 +41,7 @@ async function hapusBarang(ev) {
         else
             UiHelper.makeNotify({ type: 'success', title: 'Berhasil', message: res.message });
     });
-    location.reload();   
+    location.reload();
 }
 function editBarang(ev) {
     const barang = ev.data;
@@ -178,11 +178,7 @@ function tambahBarang() {
             formMethod: 'POST',
             formAttr: ''
         };
-<<<<<<< HEAD
     opt.modalTitle = "Tambah Barang";
-=======
-    opt.modalTitle = 'Tambah Barang';
->>>>>>> ec2b907ebf36a374dfc5efc36aa4ca3fddf37714
     opt.modalSubtitle = '';
     opt.saatBuka = () => {
         var token = $('meta[name="_token"]').attr('content');
@@ -281,7 +277,7 @@ function konfirmasi(event) {
     const barang = event.data[$(this).data('barang')];
     const status = barang.status;
 
-    if (status == 'kirim' || status== 'bayar' || status == 'selesai')
+    if (status == 'kirim' || status == 'bayar' || status == 'selesai')
         return;
 
     opt.modalId = "konfirmasi";
