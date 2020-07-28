@@ -17,7 +17,7 @@ class Users extends Migration
             $table->string('username', 100)->primary();
             $table->string('password');
             $table->string('email')->unique();
-            $table->string('nohp')->unique();
+            $table->string('nohp')->unique()->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->integer('isActive')->unsigned()->default(1);
             $table->enum('role', ['pembeli', 'pedagang', 'admin'])->default('pembeli');

@@ -2,6 +2,10 @@ $(document).ready(async function () {
     // Inisiasi UiHelper
     UiHelper.init();
 
+    $("#profile-btn").click(function () {
+        location.href(path + '/profile');
+    });
+
     $("#logout").click(function () {
         $.get(path + '/api/logout', function () {
             window.location.reload();
@@ -42,8 +46,8 @@ function showNotif(event) {
             </div>
             `,
     };
-    opt.saatBuka = ()=>{
-        fetch(path + '/api/notif/baca/' + notif.id, {method: 'PUT'});
+    opt.saatBuka = () => {
+        fetch(path + '/api/notif/baca/' + notif.id, { method: 'PUT' });
     };
     opt.modalFooter = [
         { type: 'reset', data: 'data-dismiss="modal"', text: 'Tutup', id: "batal", class: "btn btn-empty" },

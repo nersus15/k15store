@@ -89,12 +89,18 @@ class Transaksi extends Controller
                 $transaksi->where('transaksi.status', '!=', 'keranjang');
                 break;
             case 'order':
+                if (!isset($_SESSION['userdata']) || $_SESSION['userdata']['role'] != 'admin')
+                    return response("Anda tidak memiliki akses!", 401);
                 $transaksi->where('transaksi.status', 'bayar');
                 break;
             case 'keranjang':
+                if (!isset($_SESSION['userdata']) || $_SESSION['userdata']['role'] == 'admin')
+                    return response("Anda tidak memiliki akses!", 401);
                 $transaksi->where('transaksi.status', 'keranjang');
                 break;
             case 'toko':
+                if (!isset($_SESSION['userdata']) || $_SESSION['userdata']['role'] != 'pedagang')
+                    return response("Anda tidak memiliki akses!", 401);
                 $transaksi->where('transaksi.status', '!=', 'keranjang');
                 $transaksi->where('product.owner', $user);
                 break;
@@ -141,6 +147,8 @@ class Transaksi extends Controller
             'tanggal' => date('Y-m-d H:i:s')
         ];
         if ($request->checkout == 'on') {
+            if (!isset($_SESSION['userdata']) || $_SESSION['userdata']['role'] == 'admin')
+                return response("Anda tidak memiliki akses!", 401);
             if (!isset($request->edit)) {
                 $post = [
                     'jumlah' => $request->jumlah,
@@ -179,6 +187,9 @@ class Transaksi extends Controller
             $notif['pembaca'] = $request->pembeli;
         }
         if (isset($request->kirim) && $request->kirim == 'yes') {
+            if (!isset($_SESSION['userdata']) || $_SESSION['userdata']['role'] != 'pedagang')
+                return response("Anda tidak memiliki akses!", 401);
+
             $post = [
                 'tanggal_update' => date('Y-m-d H:i:s'),
                 'status' => 'kirim',
@@ -201,6 +212,8 @@ class Transaksi extends Controller
             ];
         }
         if (isset($request->selesai) && $request->selesai == 'yes') {
+            if (!isset($_SESSION['userdata']) || $_SESSION['userdata']['role'] == 'admin')
+                return response("Anda tidak memiliki akses!", 401);
             $post = [
                 'tanggal_update' => date('Y-m-d H:i:s'),
                 'status' => 'selesai',
@@ -223,6 +236,8 @@ class Transaksi extends Controller
             ];
         }
         if (isset($request->konfirmasi) && $request->konfirmasi) {
+            if (!isset($_SESSION['userdata']) || $_SESSION['userdata']['role'] != 'admin')
+                return response("Anda tidak memiliki akses!", 401);
             DB::table('product')->where('id', $request->barang)->update(['stok' => $request->sisastok, 'terjual' => $request->terjual]);
             $post = [
                 'tanggal_update' => date('Y-m-d H:i:s'),
@@ -244,7 +259,6 @@ class Transaksi extends Controller
                     'pembaca' => $request->pembeli
                 ],
             ];
-
         }
         try {
             DB::table('transaksi')->where('id', $id)->update($post);
