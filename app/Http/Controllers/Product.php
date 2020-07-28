@@ -43,6 +43,8 @@ class Product extends Controller
     {
         if (!isset($_SESSION['userdata']) || $_SESSION['userdata']['role'] != 'pedagang')
             return response("Anda tidak memiliki akses!", 401);
+        if($request->batas_beli > $request->stok)
+            return response('Batas beli tidak boleh lebih dari stok barang', 500);
         $post = [
             'id' => Str::random(5),
             'nama_product' => $request->nama_barang,

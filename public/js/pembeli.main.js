@@ -6,6 +6,10 @@ $('#masuk').click(function () {
     UiHelper.generateModal(modalId, wrapper, opt);
 });
 
+$("#profile-btn").click(function(){
+    location.href(path + '/profile');
+});
+
 $("#logout").click(function () {
     $.get(path + '/api/logout', function () {
         window.location.reload();
