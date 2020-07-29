@@ -50,12 +50,18 @@ class Auth extends Controller
         if (isset($_SESSION['userdata']))
             return response("Anda tidak memiliki akses!", 401);
         $user = new User;
-            $user->nama_lengkap = $request->nama_lengkap;
-            $user->username = $request->username;
-            $user->email = $request->email;
-            $user->password = $request->password;
-            $user->isActive = 1;
-            $user->role = 'pedagang';
+        $user->nama_lengkap = $request->nama_lengkap;
+        $user->username = $request->username;
+        $user->email = $request->email;
+        $user->password = $request->password;
+        $user->isActive = 1;
+        $user->role = 'pedagang';
+        $user->jenis_kelamin = $request->kelamin;
+
+        if (isset($request->nohp))
+            $user->nohp = $request->nohp;
+        if (isset($request->alamat))
+            $user->alamat = $request->alamat;
         try {
             $user->save();
             $_SESSION['userdata'] = [
