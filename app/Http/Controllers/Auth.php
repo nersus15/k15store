@@ -55,7 +55,7 @@ class Auth extends Controller
         $user->email = $request->email;
         $user->password = $request->password;
         $user->isActive = 1;
-        $user->role = 'pedagang';
+        $user->role = 'pembeli';
         $user->jenis_kelamin = $request->kelamin;
 
         if (isset($request->nohp))
