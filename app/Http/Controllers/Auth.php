@@ -53,7 +53,7 @@ class Auth extends Controller
         $user->nama_lengkap = $request->nama_lengkap;
         $user->username = $request->username;
         $user->email = $request->email;
-        $user->password = $request->password;
+        $user->password = Hash::make($request->password);
         $user->isActive = 1;
         $user->role = 'pembeli';
         $user->jenis_kelamin = $request->kelamin;
