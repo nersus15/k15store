@@ -66,8 +66,8 @@ class Pedagang extends Controller
             'footer' => 'comp/footerPengunjung',
             'css' => $this->resource['css'],
             'js' => $this->resource['js'],
-            'storage_path' => asset('storage'),
-            'resources_path' => asset(''),
+            'storage_path' => asset('storage', true),
+            'resources_path' => asset('', true),
             'user' => !empty($_SESSION['userdata']) ? $_SESSION['userdata'] : null,
             'content' => [
                 'public/barang',
