@@ -64,11 +64,8 @@ $(document).ready(function () {
             barang.origin = $('#origin_detail').val();
             barang.destination = $('#destination_detail').val();
             let body = {
-                id: getRandomId(),
-                tanggal: waktu(),
                 barang: data.id,
                 jumlah: barang.jumlah,
-                status: 'keranjang',
                 estimasi: $('#etd').data('etdterpilih'),
                 origin: barang.origin,
                 destinasi: barang.destination,
@@ -76,8 +73,7 @@ $(document).ready(function () {
                 kurir: $('#kurir').val(),
                 service: $("#service").val(),
                 total: barang.total,
-                _token: $('meta[name="_token"]').attr('content'),
-                pembeli: session.username ? session.username : null,
+                _token: $('meta[name="_token"]').attr('content')
             }
             if (Object.keys(session).length == 0) {
                 const { modalId, wrapper, opt } = modalConf.formlogin;

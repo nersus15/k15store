@@ -48,7 +48,7 @@ class Product extends Controller
         $post = [
             'id' => Str::random(5),
             'nama_product' => $request->nama_barang,
-            'owner' => $request->owner,
+            'owner' => $_SESSION['userdata']['username'],
             'harga' => $request->harga,
             'stok' => $request->stok,
             'kategori' => $request->kategori,
@@ -125,7 +125,7 @@ class Product extends Controller
         ];
 
         try {
-            DB::table('product')->where('id', $id)->update($post);
+            DB::table('product')->where('id', $id)->where('owner', $_SESSION['userdata']['username'])->update($post);
             $res = [
                 'message' => 'Berhasil Update barang dengan id' . $id . '(' . $request->nama_barang . ')',
             ];
@@ -158,7 +158,7 @@ class Product extends Controller
         if (!isset($_SESSION['userdata']) || $_SESSION['userdata']['role'] != 'pedagang')
             return response("Anda tidak memiliki akses!", 401);
         try {
-            DB::table('product')->where('id', $id)->delete();
+            DB::table('product')->where('id', $id)->where('owner', $_SESSION['userdata']['username'])->delete();
             $res = [
                 'message' => 'Berhasil Hapus barang dengan id' . $id,
             ];

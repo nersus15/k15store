@@ -48,12 +48,12 @@ class Transaksi extends Controller
         try {
             DB::table('transaksi')->insert(
                 [
-                    "id" => $request->id,
-                    "tanggal" => $request->tanggal,
+                    "id" => Str::random(5),
+                    "tanggal" => date('Y-m-d H:i:s'),
                     "barang" => $request->barang,
-                    "pembeli" => $request->pembeli,
+                    "pembeli" => $_SESSION['userdata']['username'],
                     "jumlah" => $request->jumlah,
-                    "status" => $request->status,
+                    "status" => 'keranjang',
                     "origin" => $request->origin,
                     "destinasi" => $request->destinasi,
                     "ongkir" => $request->ongkir,
@@ -153,7 +153,6 @@ class Transaksi extends Controller
                 $post = [
                     'jumlah' => $request->jumlah,
                     'destinasi' => $request->destinasi,
-                    'jumlah' => $request->jumlah,
                     'total' => $request->total,
                     'ongkir' => $request->ongkir,
                     'estimasi' => $request->estimasi,
@@ -212,7 +211,7 @@ class Transaksi extends Controller
             ];
         }
         if (isset($request->selesai) && $request->selesai == 'yes') {
-            if (!isset($_SESSION['userdata']) || $_SESSION['userdata']['role'] == 'admin')
+            if (!isset($_SESSION['userdata']) || $_SESSION['userdata']['role'] == 'pembeli')
                 return response("Anda tidak memiliki akses!", 401);
             $post = [
                 'tanggal_update' => date('Y-m-d H:i:s'),
@@ -235,7 +234,7 @@ class Transaksi extends Controller
                 ],
             ];
         }
-        if (isset($request->konfirmasi) && $request->konfirmasi) {
+        if (isset($request->konfirmasi)) {
             if (!isset($_SESSION['userdata']) || $_SESSION['userdata']['role'] != 'admin')
                 return response("Anda tidak memiliki akses!", 401);
             DB::table('product')->where('id', $request->barang)->update(['stok' => $request->sisastok, 'terjual' => $request->terjual]);
@@ -277,6 +276,8 @@ class Transaksi extends Controller
      */
     public function destroy($id)
     {
+        if (!isset($_SESSION['userdata']) || $_SESSION['userdata']['role'] == 'admin')
+            return response("Anda tidak memiliki akses!", 401);
         try {
 
             $tr = DB::table('transaksi')->select('product.nama_product', 'transaksi.pembeli', 'transaksi.pembeli')->join('product', 'product.id', '=', 'transaksi.barang')->where('transaksi.id', $id)->first();
