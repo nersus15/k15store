@@ -272,7 +272,7 @@ class UiHelper {
                     var formid = !formId ? opt.formOpt.formId : formId;
                     var succes = opt.submitSuccess ? opt.submitSuccess : () => { };
                     var fail = opt.submitFail ? opt.submitFail : () => { };
-                    var sebelumSubmit = opt.sebelumSubmit ? opt.sebelumSubmit : () => { };
+                    var sebelumSubmit = opt.sebelumSubmit ? opt.sebelumSubmit : () => {};
                     var rules = {};
                     var options = {
                         success: succes,

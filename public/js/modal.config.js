@@ -13,7 +13,11 @@ const modalConf = {
                     field: 'user'
                 }
             ],
+            sebelumSubmit: function(){
+                $('body').addClass('show-spinner');
+            },
             submitSuccess: function (res) {
+                $('body').removeClass('show-spinner');
                 if (!res.data)
                     $('#' + modalConf.formlogin.opt.formOpt.formId + ' #alert_danger').html(res.massage).show();
                 else {

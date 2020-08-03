@@ -101,6 +101,8 @@ async function caribiaya(ini, origin, berat, ongkir) {
 }
 
 function checkout(event) {
+    const button = $(this).attr('id');
+    $('body').addClass('show-spinner');
     const barang = event.data;
     if (!$("#d_alamat").val())
         return;
@@ -121,6 +123,7 @@ function checkout(event) {
             pembeli: session.username,
         })
     }).then(res => {
+        $("#" + button).prop('disabled', false)
         try {
             return res.json();
         }
@@ -133,6 +136,7 @@ function checkout(event) {
             UiHelper.makeNotify(notifyConf);
         }
     }).then(res => {
+        $('body').removeClass('show-spinner');
         if (!res.err) {
             notifyConf.type = 'success';
             notifyConf.title = 'Berhasil';
@@ -171,6 +175,7 @@ function hapus() {
 
 async function editdata(event) {
     $("#edit, #ck, #batal").prop('disabled', true);
+    $('body').addClass('show-spinner');
     const barang = event.data;
     kab = await fetch(path + '/api/kota').then(res => res.json()).then(res => res.rajaongkir.results);
     let { modalId, wrapper, opt } = modalConf.editkeranjang;
@@ -199,7 +204,7 @@ async function editdata(event) {
             label: `Jumlah <small class="text-danger">Min:1, Maks: ${barang.stok} </small>`, placeholder: '',
             type: 'number', name: 'jumlah', id: 'jumlah', attr: 'required', attr: `min="1" max="${barang.stok}"`, value: barang.jumlah
         },
-        {name: 'stok', value: barang.stok},
+        { name: 'stok', value: barang.stok },
         { id: 'harga', type: 'hidden', value: barang.harga, name: "harga" },
         { id: 'status', type: 'hidden', value: 'bayar', name: "status" },
         { id: 'pembeli', type: 'hidden', value: session.username, name: "pembeli" },
@@ -208,8 +213,8 @@ async function editdata(event) {
         { id: 'destinasi', type: 'hidden', value: barang.destinasi, name: "destinasi" },
         { id: 'method', type: 'hidden', value: 'PUT', name: "_method" },
         { id: 'estimasi', type: 'hidden', value: '', name: "estimasi" },
-        {name: 'barang', value: barang.id},
-        {name: 'sisastok', value: parseInt(barang.stok) - parseInt(barang.jumlah)},
+        { name: 'barang', value: barang.id },
+        { name: 'sisastok', value: parseInt(barang.stok) - parseInt(barang.jumlah) },
         {
             label: 'Destinasi (Kabupaten/ Kota)', placeholder: '', options: opsi,
             type: 'select', name: 'kab_kota', id: 'kab_kota', class: 'select2', default: barang.destinasi.split(',')[0]
@@ -238,6 +243,7 @@ async function editdata(event) {
 }
 
 function saatEditBuka(barang, origin) {
+    $('body').removeClass('show-spinner');
     $('#' + modalConf.keranjang.modalId).modal('hide');
     setTimeout(function () {
         $('body').addClass('modal-open');
