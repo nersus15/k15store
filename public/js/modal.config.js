@@ -13,7 +13,13 @@ const modalConf = {
                     field: 'user'
                 }
             ],
+            sebelumSubmit: function () {
+                $('body').addClass('show-spinner');
+                $('#login').prop('disabled', true);
+            },
             submitSuccess: function (res) {
+                $('body').removeClass('show-spinner');
+                $('#login').prop('disabled', false);
                 if (!res.data)
                     $('#' + modalConf.formlogin.opt.formOpt.formId + ' #alert_danger').html(res.massage).show();
                 else {
@@ -34,7 +40,7 @@ const modalConf = {
                     UiHelper.generateModal(modalId, wrapper, opt);
                 });
 
-                
+
             },
             saatTutup: () => {
                 $("#daftar").off('click');
@@ -93,7 +99,13 @@ const modalConf = {
                         $('#batas_beli').val($(this).val());
                 });
             },
+            sebelumSubmit: function () {
+                $('#add').prop('disabled', true)
+                $('body').addClass('show-spinner');
+            },
             submitSuccess: (res) => {
+                $('#add').prop('disabled', false);
+                $('body').removeClass('show-spinner');
                 if (res.err)
                     $('#' + modalConf.formlogin.opt.formOpt.formId + ' #alert_danger').html(`<p>${res.massage}</p>`).show();
                 else
@@ -101,7 +113,7 @@ const modalConf = {
             },
             saatTutup: () => {
                 $('body').removeClass('modal-open');
-             },
+            },
             formOpt: {
                 enctype: 'multipart/form-data',
                 formId: "form-add-barang",
@@ -173,6 +185,14 @@ const modalConf = {
                 setTimeout(function () {
                     $('body').addClass('modal-open');
                 }, 1000);
+            },
+            sebelumSubmit: function () {
+                $('body').addClass('show-spinner');
+                $('#register').prop('disabled', true);
+            },
+            submitSuccess: function () {
+                $('#register').prop('disabled', false);
+                $('body').removeClass('show-spinner');
             },
             saatTutup: () => { },
             formOpt: {

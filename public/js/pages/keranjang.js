@@ -101,6 +101,8 @@ async function caribiaya(ini, origin, berat, ongkir) {
 }
 
 function checkout(event) {
+    $('body').addClass('show-spinner');
+    $("#edit, #ck, #batal").prop('disabled', true);
     const barang = event.data;
     if (!$("#d_alamat").val())
         return;
@@ -121,6 +123,7 @@ function checkout(event) {
             pembeli: session.username,
         })
     }).then(res => {
+        $("#edit, #ck, #batal").prop('disabled', true);
         try {
             return res.json();
         }
@@ -133,6 +136,7 @@ function checkout(event) {
             UiHelper.makeNotify(notifyConf);
         }
     }).then(res => {
+        $('body').removeClass('show-spinner');
         if (!res.err) {
             notifyConf.type = 'success';
             notifyConf.title = 'Berhasil';
@@ -151,6 +155,8 @@ function checkout(event) {
 }
 
 function hapus() {
+    $('body').addClass('show-spinner');
+    $("#edit, #ck, #batal").prop('disabled', true);
     const idtr = $(this).data('idtr');
     $(this).prop('disabled', true);
     fetch(path + '/api/transaksi/' + idtr, {
@@ -160,6 +166,8 @@ function hapus() {
             'Content-Type': 'application/json'
         },
     }).then(res => res.json()).then(res => {
+        $('body').removeClass('show-spinner');
+        $("#edit, #ck, #batal").prop('disabled', true);
         $(this).prop('disabled', false);
         if (res.err)
             UiHelper.makeNotify({ type: 'danger', title: 'Error', message: res.message });
@@ -170,6 +178,7 @@ function hapus() {
 }
 
 async function editdata(event) {
+    $('body').addClass('show-spinner');
     $("#edit, #ck, #batal").prop('disabled', true);
     const barang = event.data;
     kab = await fetch(path + '/api/kota').then(res => res.json()).then(res => res.rajaongkir.results);
@@ -199,7 +208,7 @@ async function editdata(event) {
             label: `Jumlah <small class="text-danger">Min:1, Maks: ${barang.stok} </small>`, placeholder: '',
             type: 'number', name: 'jumlah', id: 'jumlah', attr: 'required', attr: `min="1" max="${barang.stok}"`, value: barang.jumlah
         },
-        {name: 'stok', value: barang.stok},
+        { name: 'stok', value: barang.stok },
         { id: 'harga', type: 'hidden', value: barang.harga, name: "harga" },
         { id: 'status', type: 'hidden', value: 'bayar', name: "status" },
         { id: 'pembeli', type: 'hidden', value: session.username, name: "pembeli" },
@@ -208,8 +217,8 @@ async function editdata(event) {
         { id: 'destinasi', type: 'hidden', value: barang.destinasi, name: "destinasi" },
         { id: 'method', type: 'hidden', value: 'PUT', name: "_method" },
         { id: 'estimasi', type: 'hidden', value: '', name: "estimasi" },
-        {name: 'barang', value: barang.id},
-        {name: 'sisastok', value: parseInt(barang.stok) - parseInt(barang.jumlah)},
+        { name: 'barang', value: barang.id },
+        { name: 'sisastok', value: parseInt(barang.stok) - parseInt(barang.jumlah) },
         {
             label: 'Destinasi (Kabupaten/ Kota)', placeholder: '', options: opsi,
             type: 'select', name: 'kab_kota', id: 'kab_kota', class: 'select2', default: barang.destinasi.split(',')[0]
@@ -238,6 +247,8 @@ async function editdata(event) {
 }
 
 function saatEditBuka(barang, origin) {
+    $('body').removeClass('show-spinner');
+    $("#edit, #ck, #batal").prop('disabled', true);
     $('#' + modalConf.keranjang.modalId).modal('hide');
     setTimeout(function () {
         $('body').addClass('modal-open');
